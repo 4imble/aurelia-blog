@@ -1,27 +1,25 @@
-import {inject} from 'aurelia-dependency-injection';
-import {Router, activationStrategy} from 'aurelia-router';
-import {ValidationControllerFactory, ValidationRules} from 'aurelia-validation';
-import {UserService} from '../../shared/services/user-service';
-import {SharedState} from '../../shared/state/shared-state';
+import { autoinject } from 'aurelia-dependency-injection';
+import { Router, activationStrategy } from 'aurelia-router';
+import { ValidationController, ValidationControllerFactory, ValidationRules } from 'aurelia-validation';
+import { UserService } from '../../shared/services/user-service';
 
-@inject(UserService, SharedState, Router, ValidationControllerFactory)
+@autoinject()
 export class AuthComponent {
+  controller: ValidationController
+
   type = '';
   username = '';
   email = '';
   password = '';
   errors = null;
 
-  constructor(userService, sharedState, router, controllerFactory) {
-    this.userService = userService;
-    this.sharedState = sharedState;
-    this.router = router;
+  constructor(private userService: UserService, private router: Router, controllerFactory: ValidationControllerFactory) {
     this.controller = controllerFactory.createForCurrentScope();
 
     ValidationRules
       .ensure('email').required().email()
       .ensure('password').required().minLength(8)
-      .ensure('username').required().when((auth) => auth.type === 'register')
+      .ensure('username').required().when((auth: AuthComponent) => auth.type === 'register')
       .on(this);
   }
 
