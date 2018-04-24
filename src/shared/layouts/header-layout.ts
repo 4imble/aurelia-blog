@@ -10,6 +10,9 @@ export class HeaderLayout {
   constructor(private sharedState: SharedState) { }
 
   routerConfigChanged(newValue, oldValue) {
+    if(!newValue)
+      return;
+      
     this.activeRoute = newValue.name;
   }
 }
