@@ -1,17 +1,17 @@
-import {inject} from 'aurelia-dependency-injection';
+import {autoinject} from 'aurelia-dependency-injection';
 import {ArticleService} from "../../shared/services/article-service";
 
-@inject(ArticleService)
+@autoinject()
 export class ProfileArticleComponent {
+  username: string;
+
   articles = [];
   pageNumber;
   totalPages;
   currentPage = 1;
   limit = 10;
 
-  constructor(as) {
-    this.articleService = as;
-  }
+  constructor(private articleService: ArticleService) {  }
 
   activate(params, routeConfig) {
     this.username = params.name;
