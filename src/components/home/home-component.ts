@@ -1,11 +1,13 @@
-import {BindingEngine} from 'aurelia-framework';
-import {inject} from 'aurelia-dependency-injection';
-import {SharedState} from '../../shared/state/shared-state';
-import {ArticleService} from "../../shared/services/article-service"
-import {TagService} from '../../shared/services/tag-service';
+import { autoinject } from 'aurelia-dependency-injection';
+import { BindingEngine, Disposable } from 'aurelia-framework';
+import { ArticleService } from "../../shared/services/article-service";
+import { TagService } from '../../shared/services/tag-service';
+import { SharedState } from '../../shared/state/shared-state';
 
-@inject(SharedState, BindingEngine, ArticleService, TagService)
+@autoinject()
 export class HomeComponent {
+  subscription: Disposable;
+
   articles = [];
   shownList = 'all';
   tags = [];
@@ -15,12 +17,11 @@ export class HomeComponent {
   currentPage = 1;
   limit = 10;
 
-  constructor(sharedState, bindingEngine, articleService, tagService) {
-    this.sharedState = sharedState;
-    this.bindingEngine = bindingEngine;
-    this.articleService = articleService;
-    this.tagService = tagService;
-  }
+  constructor(
+    private sharedState: SharedState,
+    private bindingEngine: BindingEngine,
+    private articleService: ArticleService,
+    private tagService: TagService) { }
 
   bind() {
     this.subscription = this.bindingEngine.propertyObserver(this.sharedState, 'isAuthenticated')
@@ -41,10 +42,10 @@ export class HomeComponent {
   getArticles() {
     let params = {
       limit: this.limit,
-      offset: this.limit * (this.currentPage - 1)
+      offset: this.limit * (this.currentPage - 1),
+      tag: this.filterTag
     };
-    if (this.filterTag !== undefined)
-      params.tag = this.filterTag;
+
     this.articleService.getList(this.shownList, params)
       .then(response => {
         this.articles.splice(0);
@@ -64,7 +65,9 @@ export class HomeComponent {
   }
 
   setListTo(type, tag) {
-    if (type === 'feed' && !this.sharedState.isAuthenticated) return;
+    if (type === 'feed' && !this.sharedState.isAuthenticated)
+      return;
+
     this.shownList = type;
     this.filterTag = tag;
     this.getArticles();
