@@ -1,12 +1,10 @@
-import {inject} from 'aurelia-dependency-injection';
-import {ApiService} from './api-service';
+import { autoinject } from 'aurelia-dependency-injection';
+import { ApiService } from './api-service';
 
-@inject(ApiService)
+@autoinject()
 export class ProfileService {
 
-  constructor(apiService) {
-    this.apiService = apiService;
-  }
+  constructor(private apiService: ApiService) { }
 
   get(username) {
     return this.apiService.get('/profiles/' + username)

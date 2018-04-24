@@ -1,17 +1,14 @@
-import {config} from './config';
-import {HttpClient, json} from 'aurelia-fetch-client';
-import {inject} from 'aurelia-dependency-injection';
+import { autoinject } from 'aurelia-dependency-injection';
+import { HttpClient, json } from 'aurelia-fetch-client';
 import * as qs from 'querystringify';
-import {JwtService} from './jwt-service';
-import {status, parseError} from './service-helper';
+import { config } from './config';
+import { JwtService } from './jwt-service';
+import { parseError, status } from './service-helper';
 
-@inject(HttpClient, JwtService)
+@autoinject()
 export class ApiService {
 
-  constructor(http, jwtService) {
-    this.http = http;
-    this.jwtService = jwtService;
-  }
+  constructor(private http: HttpClient, private jwtService: JwtService) {  }
 
   setHeaders() {
     const headersConfig = {
@@ -25,7 +22,7 @@ export class ApiService {
     return new Headers(headersConfig);
   }
 
-  get(path, params) {
+  get(path, params?) {
     const options = {
       method: 'GET',
       headers: this.setHeaders()

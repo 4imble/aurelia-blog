@@ -1,12 +1,10 @@
-import {inject} from 'aurelia-dependency-injection';
-import {ApiService} from './api-service';
+import { autoinject } from 'aurelia-dependency-injection';
+import { ApiService } from './api-service';
 
-@inject(ApiService)
+@autoinject()
 export class ArticleService {
 
-  constructor(apiService) {
-    this.apiService = apiService;
-  }
+  constructor(private apiService: ApiService) { }
 
   getList(type, params) {
     return this.apiService.get('/articles' + ((type === 'feed') ? '/feed' : ''), params)
@@ -24,11 +22,11 @@ export class ArticleService {
   save(article) {
     if (article.slug) {
       // If we're updating an existing article
-      return this.apiService.put('/articles/' + article.slug, {article: article})
+      return this.apiService.put('/articles/' + article.slug, { article: article })
         .then(data => data.article)
     } else {
       // Otherwise, create a new article
-      return this.apiService.post('/articles/', {article: article})
+      return this.apiService.post('/articles/', { article: article })
         .then(data => data.article)
     }
   }

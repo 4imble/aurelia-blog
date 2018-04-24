@@ -7,11 +7,7 @@ import {SharedState} from '../state/shared-state';
 @inject(ApiService, JwtService, SharedState)
 export class UserService {
 
-  constructor(apiService, jwtService, sharedState) {
-    this.apiService = apiService;
-    this.jwtService = jwtService;
-    this.sharedState = sharedState;
-  }
+  constructor(private apiService: ApiService, private jwtService: JwtService, private sharedState: SharedState) {  }
 
   // Verify JWT in localstorage with server & load user's info.
   // This runs once on application startup.
