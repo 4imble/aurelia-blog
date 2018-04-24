@@ -1,15 +1,13 @@
 import {bindable, computedFrom} from 'aurelia-framework';
-import {inject} from 'aurelia-framework';
+import {autoinject} from 'aurelia-framework';
 import {SharedState} from "../../shared/state/shared-state";
 
-@inject(SharedState)
+@autoinject()
 export class CommentCustomElement {
   @bindable comment;
   @bindable deleteCb;
 
-  constructor(shSt) {
-    this.sharedState = shSt;
-  }
+  constructor(private sharedState: SharedState) {  }
 
   @computedFrom('comment.author.username')
   get canModify() {

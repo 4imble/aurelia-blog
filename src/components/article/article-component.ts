@@ -1,25 +1,25 @@
-import {inject, computedFrom} from 'aurelia-framework';
-import {Router} from 'aurelia-router';
-import {ArticleService} from "../../shared/services/article-service";
-import {CommentService} from "../../shared/services/comment-service";
-import {UserService} from "../../shared/services/user-service";
-import {SharedState} from "../../shared/state/shared-state";
-import {ProfileService} from "../../shared/services/profile-service";
+import { computedFrom, autoinject } from 'aurelia-framework';
+import { Router, RouteConfig } from 'aurelia-router';
+import { ArticleService } from "../../shared/services/article-service";
+import { CommentService } from "../../shared/services/comment-service";
+import { ProfileService } from "../../shared/services/profile-service";
+import { SharedState } from "../../shared/state/shared-state";
 
-@inject(ArticleService, CommentService, UserService, SharedState, ProfileService, Router)
+@autoinject()
 export class ArticleComponent {
+  routeConfig: RouteConfig;
+  slug: String;
+
   article;
   comments;
   myComment;
 
-  constructor(as, cs, us, shst, ps, r) {
-    this.articleService = as;
-    this.commentService = cs;
-    this.userService = us;
-    this.sharedState = shst;
-    this.profileService = ps;
-    this.router = r;
-  }
+  constructor(
+    private articleService: ArticleService,
+    private commentService: CommentService,
+    private sharedState: SharedState,
+    private profileService: ProfileService,
+    private router: Router) { }
 
   activate(params, routeConfig) {
     this.routeConfig = routeConfig;
@@ -78,5 +78,4 @@ export class ArticleComponent {
           .then(comments => this.comments = comments);
       })
   }
-
 }
