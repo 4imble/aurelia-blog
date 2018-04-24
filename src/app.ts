@@ -1,15 +1,15 @@
-import {inject} from 'aurelia-dependency-injection';
-import {UserService} from './shared/services/user-service';
+import { autoinject } from 'aurelia-dependency-injection';
+import { UserService } from './shared/services/user-service';
+import { Router } from 'aurelia-router';
 
-@inject(UserService)
+@autoinject()
 export class App {
+  message: string = 'Hello World!'; // just for unit testing ;)
+  router: Router;
 
-  constructor(userService) {
-    this.message = 'Hello World!'; // just for unit testing ;)
-    this.userService = userService;
-  }
+  constructor(private userService: UserService) { }
 
-  configureRouter(config, router) {
+  configureRouter(config, router: Router) {
     config.title = 'Conduit';
     config.map([
       {route: ['', 'home'], moduleId: 'components/home/home-component', name: 'home', title: 'Home'},

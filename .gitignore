@@ -10,3 +10,4 @@ node_modules
 Thumbs.db
 scripts
 dist/
+test/coverage-jest/

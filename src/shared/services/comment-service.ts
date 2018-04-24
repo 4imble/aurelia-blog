@@ -1,12 +1,10 @@
-import {inject} from 'aurelia-dependency-injection';
-import {ApiService} from './api-service';
+import { autoinject } from 'aurelia-dependency-injection';
+import { ApiService } from './api-service';
 
-@inject(ApiService)
+@autoinject()
 export class CommentService {
 
-  constructor(apiService) {
-    this.apiService = apiService;
-  }
+  constructor(private apiService: ApiService) { }
 
   add(slug, payload) {
     return this.apiService.post(`/articles/${slug}/comments`, {comment: {body: payload}})
