@@ -5,11 +5,7 @@ var path = require('path');
 
 @inject(Project, CLIOptions, UI)
 export default class ElementGenerator {
-  constructor(project, options, ui) { 
-    this.project = project;
-    this.options = options;
-    this.ui = ui;
-  }
+  constructor(private project: Project, private options: CLIOptions, private ui: UI) { }
 
   execute() {
     let self = this;
@@ -25,7 +21,7 @@ export default class ElementGenerator {
             let className = this.project.makeClassName(name);
 
             self.project.root.add(
-              ProjectItem.text(path.join(subFolders, fileName + ".js"), this.generateJSSource(className)),
+              ProjectItem.text(path.join(subFolders, fileName + ".ts"), this.generateJSSource(className)),
               ProjectItem.text(path.join(subFolders, fileName + ".html"), this.generateHTMLSource(className))
             );
 
@@ -36,7 +32,9 @@ export default class ElementGenerator {
   }
 
   generateJSSource(className) {
-    return `export class ${className} {     
+    return `export class ${className} {    
+  message: string;
+  
   constructor() {
     this.message = 'Hello world';
   }

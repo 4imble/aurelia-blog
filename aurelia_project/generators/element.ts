@@ -3,11 +3,7 @@ import {Project, ProjectItem, CLIOptions, UI} from 'aurelia-cli';
 
 @inject(Project, CLIOptions, UI)
 export default class ElementGenerator {
-  constructor(project, options, ui) {
-    this.project = project;
-    this.options = options;
-    this.ui = ui;
-  }
+  constructor(private project: Project, private options: CLIOptions, private ui: UI) { }
 
   execute() {
     return this.ui
@@ -17,7 +13,7 @@ export default class ElementGenerator {
         let className = this.project.makeClassName(name);
 
         this.project.elements.add(
-          ProjectItem.text(`${fileName}.js`, this.generateJSSource(className)),
+          ProjectItem.text(`${fileName}.ts`, this.generateJSSource(className)),
           ProjectItem.text(`${fileName}.html`, this.generateHTMLSource(className))
         );
 
@@ -27,7 +23,7 @@ export default class ElementGenerator {
   }
 
   generateJSSource(className) {
-    return `import {bindable} from 'aurelia-framework';
+return `import {bindable} from 'aurelia-framework';
 
 export class ${className} {
   @bindable value;
@@ -37,12 +33,12 @@ export class ${className} {
   }
 }
 
-`;
+`
   }
 
   generateHTMLSource(className) {
-    return `<template>
+return `<template>
   <h1>\${value}</h1>
-</template>`;
+</template>`
   }
 }

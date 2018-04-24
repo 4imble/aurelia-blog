@@ -3,11 +3,7 @@ import {Project, ProjectItem, CLIOptions, UI} from 'aurelia-cli';
 
 @inject(Project, CLIOptions, UI)
 export default class GeneratorGenerator {
-  constructor(project, options, ui) {
-    this.project = project;
-    this.options = options;
-    this.ui = ui;
-  }
+  constructor(private project: Project, private options: CLIOptions, private ui: UI) { }
 
   execute() {
     return this.ui
@@ -17,7 +13,7 @@ export default class GeneratorGenerator {
         let className = this.project.makeClassName(name);
 
         this.project.generators.add(
-          ProjectItem.text(`${fileName}.js`, this.generateSource(className))
+          ProjectItem.text(`${fileName}.ts`, this.generateSource(className))
         );
 
         return this.project.commitChanges()
@@ -26,16 +22,12 @@ export default class GeneratorGenerator {
   }
 
   generateSource(className) {
-    return `import {inject} from 'aurelia-dependency-injection';
+return `import {autoinject} from 'aurelia-dependency-injection';
 import {Project, ProjectItem, CLIOptions, UI} from 'aurelia-cli';
 
-@inject(Project, CLIOptions, UI)
+@autoinject()
 export default class ${className}Generator {
-  constructor(project, options, ui) {
-    this.project = project;
-    this.options = options;
-    this.ui = ui;
-  }
+  constructor(private project: Project, private options: CLIOptions, private ui: UI) { }
 
   execute() {
     return this.ui
@@ -45,7 +37,7 @@ export default class ${className}Generator {
         let className = this.project.makeClassName(name);
 
         this.project.elements.add(
-          ProjectItem.text(\`\${fileName}.js\`, this.generateSource(className))
+          ProjectItem.text(\`\${fileName}.ts\`, this.generateSource(className))
         );
 
         return this.project.commitChanges()
@@ -68,6 +60,6 @@ export class \${className} {
   }
 }
 
-`;
+`
   }
 }

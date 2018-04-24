@@ -3,11 +3,7 @@ import {Project, ProjectItem, CLIOptions, UI} from 'aurelia-cli';
 
 @inject(Project, CLIOptions, UI)
 export default class AttributeGenerator {
-  constructor(project, options, ui) {
-    this.project = project;
-    this.options = options;
-    this.ui = ui;
-  }
+  constructor(private project: Project, private options: CLIOptions, private ui: UI) { }
 
   execute() {
     return this.ui
@@ -17,7 +13,7 @@ export default class AttributeGenerator {
         let className = this.project.makeClassName(name);
 
         this.project.attributes.add(
-          ProjectItem.text(`${fileName}.js`, this.generateSource(className))
+          ProjectItem.text(`${fileName}.ts`, this.generateSource(className))
         );
 
         return this.project.commitChanges()
@@ -26,19 +22,17 @@ export default class AttributeGenerator {
   }
 
   generateSource(className) {
-    return `import {inject} from 'aurelia-framework';
+return `import {autoinject} from 'aurelia-framework';
 
-@inject(Element)
+@autoinject()
 export class ${className}CustomAttribute {
-  constructor(element) {
-    this.element = element;
-  }
+  constructor(private element: Element) { }
 
   valueChanged(newValue, oldValue) {
 
   }
 }
 
-`;
+`
   }
 }
