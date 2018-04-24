@@ -1,16 +1,16 @@
-import {inject, observable} from 'aurelia-framework';
-import {Router} from 'aurelia-router'
-import {ArticleService} from "../../shared/services/article-service";
+import { autoinject, observable } from 'aurelia-framework';
+import { Router, RouteConfig } from 'aurelia-router';
+import { ArticleService } from "../../shared/services/article-service";
 
-@inject(ArticleService, Router)
+@autoinject()
 export class EditorComponent {
+  routeConfig: RouteConfig;
+  slug: String;
+
   article;
   @observable() tag;
 
-  constructor(as, r) {
-    this.articleService = as;
-    this.router = r;
-  }
+  constructor(private articleService: ArticleService, private router: Router) { }
 
   activate(params, routeConfig) {
     this.routeConfig = routeConfig;
@@ -22,7 +22,7 @@ export class EditorComponent {
           this.article = article;
         });
     } else {
-      this .article = {
+      this.article = {
         title: '',
         description: '',
         body: '',
@@ -30,7 +30,7 @@ export class EditorComponent {
       };
     }
     return null;
-}
+  }
 
   tagChanged(newValue, oldValue) {
     if (newValue !== undefined && newValue !== '')
@@ -49,7 +49,7 @@ export class EditorComponent {
     this.articleService.save(this.article)
       .then((article) => {
         this.slug = article.slug;
-        this.router.navigateToRoute('article', {slug: this.slug})
+        this.router.navigateToRoute('article', { slug: this.slug })
       })
   }
 }
